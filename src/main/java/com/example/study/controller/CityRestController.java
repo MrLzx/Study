@@ -1,6 +1,5 @@
 package com.example.study.controller;
 
-import com.example.study.domain.City;
 import com.example.study.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

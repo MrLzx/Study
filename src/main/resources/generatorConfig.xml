@@ -4,8 +4,6 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <classPathEntry location="/Program Files/IBM/SQLLIB/java/db2java.zip" />
-
     <context id="DB2Tables" targetRuntime="MyBatis3">
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
                         connectionURL="jdbc:mysql://localhost:3306/springbootdb"
@@ -14,34 +12,56 @@
         </jdbcConnection>
 
         <javaTypeResolver>
-            <property name="forceBigDecimals" value="false" />
+            <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="com.example.study.domain" targetProject="\src\main\java">
-            <property name="enableSubPackages" value="true" />
-            <property name="trimStrings" value="true" />
+        <javaModelGenerator targetPackage="com.example.study.domain" targetProject="src/main/java">
+            <!--此属性用于选择MBG是否将根据内省表的目录和架构为对象生成不同的Java包。例如，假设模式MYSCHMA中的表为MYTABLE。
+            还假设targetPackage属性设置为“com.mycompany”。如果此属性为true，则生成的DAO接口和表的类将放在包“com.mycompany.myschema”中。
+            如果属性为false，则生成的SQL Map将放在“com.mycompany”架构中。默认值为false。-->
+            <property name="enableSubPackages" value="true"/>
+
+            <!--此属性用于选择MyBatis Generator是否添加代码以从数据库返回的字符字段中修剪空白区域。如果数据库将数据存储在CHAR字段而不是VARCHAR字段中，则此选项非常有用。
+            如果为true，MyBatis Generator将插入代码以修剪字符字段。可以使用<table>或<columnOverride>元素中的trimStrings属性覆盖。默认值为false。-->
+            <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="mapper"  targetProject="\main\resources">
-            <property name="enableSubPackages" value="true" />
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.example.study.dao"  targetProject="\src\main\java">
-            <property name="enableSubPackages" value="true" />
+        <!--type="XMLMAPPER" 客户端生成器-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.example.study.dao" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table schema="springbootdb" tableName="city" domainObjectName="" >
+        <!--domainObjectName 生成对象名称的基本名称。如果未指定，MBG将根据tableName自动生成名称。名称（在此处指定或自动生成）将用于计算生成的域类名称和DAO类名称。
+        您可以在域对象名称中指定包片段。例如，如果指定foo.Bar，则域对象将为Bar，并且包foo将附加到生成器配置中指定的目标包。-->
+        <table schema="springbootdb" tableName="city" domainObjectName="">
+
+            <!--如果为true，则MBG将使用从数据库元数据返回的列名作为生成的域对象的属性。如果为false（默认值），MBG将尝试驼峰返回的名称。
+            在任何一种情况下，都可以通过<columnOverride>元素显式指定名称，在这种情况下，将忽略指定列的属性。
+            例如，假设一个表包含START_DATE列。如果此属性的值为“true”，则MBG将生成属性名称START_DATE  - 意味着该值的getter和setter将为getSTART_DATE（）和setSTART_DATE（）。
+            如果此属性的值为false，则MBG将生成属性名称为startDate  - 这意味着该值的getter和setter将为getStartDate（）和setStartDate（）。默认值为false。-->
             <property name="useActualColumnNames" value="true"/>
 
+            <!--
+                配置主键
 
-            <generatedKey column="ID" sqlStatement="MySql" identity="true" />
+                identity 如果为true，则将该列标记为标识列，并将生成的<selectKey>元素放置在插入之后（对于标识列）。如果为false，
+                则生成的<selectKey>将放置在插入之前（通常用于序列）。要点：即使您将type属性指定为“post”，仍应将此值指定为标识列的“true”。
+                这将标记MBG以从插入列表中删除列。默认值为false。
+            -->
+            <generatedKey column="ID" sqlStatement="MySql" identity="true"/>
 
             <!--指定表列名对应的类变量名-->
             <!--<columnOverride column="DATE_FIELD" property="startDate" />-->
 
-            <ignoreColumn column="FRED" />
-            <columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" />
-        </table>
+            <!--不为指定列生成变量-->
+            <!--<ignoreColumn column="FRED"/>-->
 
+            <!--更改指定列的属性-->
+            <!--<columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" javaType=""/>-->
+        </table>
     </context>
 </generatorConfiguration>

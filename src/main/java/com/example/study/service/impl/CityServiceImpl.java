@@ -1,7 +1,5 @@
 package com.example.study.service.impl;
 
-import com.example.study.dao.CityDao;
-import com.example.study.domain.City;
 import com.example.study.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
